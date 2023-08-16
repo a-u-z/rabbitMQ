@@ -22,6 +22,7 @@
   * Dead-Letter Exchange（死信交換器）： 死信交換器是一個特殊的交換器，用於重新定向無法被正常處理的消息。如果消息在一個隊列中達到最大重新嘗試次數或因某些原因無法處理，它會被重新路由到死信交換器。
   * Virtual Host（虛擬主機）： 虛擬主機是 RabbitMQ 中的一個邏輯分割，用於隔離不同應用程式之間的資源。每個虛擬主機擁有自己的隊列、交換器和用戶許可權，從而實現了多租戶的隔離。
 
+* docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.12-management
 * 1: 一送一接
   * go run receive.go
     * 啟動接收器
@@ -41,4 +42,8 @@
   * 使用第一個教學，啟動多個 receive.go 也有相同效果
   * 學習設置持久化，在 worker 關閉後，因為沒有確認訊息處理，所以會重新在隊列中排序
   * 在訊息本身也需要做設定（new_task）
-*
+* 使用交換機來設定路由
+  * go run 4_receive_logs_direct.go info warn error
+    * 從 info 開始可以選擇登入什麼樣的 exchange key 也就是路由
+  * go run 4_emit_log_direct.go info "Run. Run. Or it will explode."
+    * 當中的 info
