@@ -9,6 +9,8 @@
   8. 微服務架構： 在微服務架構中，不同的微服務之間可能需要通信，RabbitMQ 可以幫助實現這種通信，從而保持微服務之間的解耦。
   9. 即時數據流： 當你需要處理即時的數據流，如實時分析、監控系統等，RabbitMQ 可以幫助你管理和分發數據。
 
+* 核心概念
+  * 製作人從不直接向佇列傳送任何訊息。 實際上，製片人往往甚至不知道訊息是否會傳遞到任何佇列。
 
 * 基本名詞及解釋
   * Producer（生產者）： 生產者是發送消息到 RabbitMQ 交換器的應用程式或服務。它將消息發布到交換器，然後由 RabbitMQ 根據交換器的規則將消息路由到一個或多個隊列。
@@ -28,7 +30,7 @@
     * 啟動接收器
   * go run send.go
     * 發送一則訊息
-* 2: 一送多接
+* 2: 一送多接，但是都是一個接
   * go run new_task.go hello world
     * go run new_task.go First message.
     * go run new_task.go Second message..
@@ -42,7 +44,10 @@
   * 使用第一個教學，啟動多個 receive.go 也有相同效果
   * 學習設置持久化，在 worker 關閉後，因為沒有確認訊息處理，所以會重新在隊列中排序
   * 在訊息本身也需要做設定（new_task）
-* 使用交換機來設定路由
+* 3. 一送多接，不過大家都接，廣播模式
+  * go run 3_emit_log.go hello world
+  * go run 3_receive_logs.go
+* 4. 使用交換機來設定路由
   * go run 4_receive_logs_direct.go info warn error
     * 從 info 開始可以選擇登入什麼樣的 exchange key 也就是路由
   * go run 4_emit_log_direct.go info "Run. Run. Or it will explode."
