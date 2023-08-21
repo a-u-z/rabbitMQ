@@ -17,14 +17,17 @@ func failOnError(err error, msg string) {
 }
 
 func main() {
+	// 建立連線
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
 
+	// 建立通道，給併發使用
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
 
+	// 宣告交換機，使用 fanout 廣播模式
 	err = ch.ExchangeDeclare(
 		"logs",   // name
 		"fanout", // type
@@ -39,6 +42,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	// 發送內容
 	body := bodyFrom(os.Args)
 	err = ch.PublishWithContext(ctx,
 		"logs", // exchange

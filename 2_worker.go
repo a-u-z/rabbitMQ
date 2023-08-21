@@ -60,7 +60,7 @@ func main() {
 			t := time.Duration(dotCount)
 			time.Sleep(t * time.Second)
 			log.Printf("Done")
-			d.Ack(false) // 確認任務完成， false 的意思是不需要重新排隊
+			d.Ack(false) // 確認任務完成， false 的意思是不需要重新進入隊列
 		}
 	}()
 

@@ -13,14 +13,17 @@ func failOnError(err error, msg string) {
 }
 
 func main() {
+	// 做連線
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
 
+	// 做通道
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
 
+	// 宣告交換機，使用 fanout 廣播模式
 	err = ch.ExchangeDeclare(
 		"logs",   // name
 		"fanout", // type
@@ -32,6 +35,7 @@ func main() {
 	)
 	failOnError(err, "Failed to declare an exchange")
 
+	// 宣告隊列，生成動態隊列來處理
 	q, err := ch.QueueDeclare(
 		"",    // name，空的代表會讓 rabbitMQ 產生一個隨機的隊列
 		false, // durable
@@ -42,6 +46,7 @@ func main() {
 	)
 	failOnError(err, "Failed to declare a queue")
 
+	// 將上面那個隨機的隊列，跟名字叫做 logs 的交換機綁在一起
 	err = ch.QueueBind(
 		q.Name, // queue name
 		"",     // routing key

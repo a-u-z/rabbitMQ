@@ -50,5 +50,9 @@
 * 4. 使用交換機來設定路由
   * go run 4_receive_logs_direct.go info warn error
     * 從 info 開始可以選擇登入什麼樣的 exchange key 也就是路由
+    * 這個會接收 info warn error 三種
+  * go run 4_receive_logs_direct.go error
+    * 這個只會接收 error 的
   * go run 4_emit_log_direct.go info "Run. Run. Or it will explode."
-    * 當中的 info
+    * 當中的 info 就是 routing key 會說送到哪個接收器
+  * go run 4_emit_log_direct.go error "Run. Run. Or it will explode."

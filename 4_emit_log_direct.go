@@ -17,14 +17,17 @@ func failOnError(err error, msg string) {
 }
 
 func main() {
+	// 做連線
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
 
+	// 做通道
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
 
+	// 宣告交換機類型為 direct 要完全匹配才會將消息發送到隊列
 	err = ch.ExchangeDeclare(
 		"logs_direct", // name
 		"direct",      // type
