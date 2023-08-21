@@ -47,7 +47,7 @@
 * 3. 一送多接，不過大家都接，廣播模式
   * go run 3_emit_log.go hello world
   * go run 3_receive_logs.go
-* 4. 使用交換機來設定路由
+* 4. 使用交換機來做路由，要完全相同才會處理
   * go run 4_receive_logs_direct.go info warn error
     * 從 info 開始可以選擇登入什麼樣的 exchange key 也就是路由
     * 這個會接收 info warn error 三種
@@ -56,3 +56,8 @@
   * go run 4_emit_log_direct.go info "Run. Run. Or it will explode."
     * 當中的 info 就是 routing key 會說送到哪個接收器
   * go run 4_emit_log_direct.go error "Run. Run. Or it will explode."
+* 5. 使用交換機來做路由，部分相同也可以
+  * 5_receive_logs_topic
+    * go run 5_receive_logs_topic.go "kern.*" "*.critical"
+  * 5_emit_log_topic
+    * go run 5_emit_log_topic.go kern.critical "A critical kernel error"
